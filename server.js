@@ -4,6 +4,9 @@ const { animals } = require('./:data/animals');
 // Use Express.js npm package
 const express = require('express');
 
+// Tell app to use an environemnt variable (to work with Heroku)
+const PORT = process.env.PORT || 3001;
+
 // Instantiate (virtualize) the server
 const app = express();
 
@@ -30,7 +33,11 @@ function filterByQuery(query, animalsArray) {
           // array will then contain only the entries that contain the trait,
           // so at the end we'll have an array of animals that have every one 
           // of the traits when the .forEach() loop is finished.
+
+          // Filtering by trait and pushing animals with that trait into the FilteredResults array (updating FilteredResults array)
           filteredResults = filteredResults.filter(
+              //Name every element in the filtered results "animal" and checking the index of the trait
+              // If we check the index of the animal/trait and it exists in the array (!== -1) then it will update it
             animal => animal.personalityTraits.indexOf(trait) !== -1
           );
         });
@@ -44,6 +51,7 @@ function filterByQuery(query, animalsArray) {
     if (query.name) {
         filteredResults = filteredResults.filter(animal => animal.name === query.name);
     }
+    // Returns updated array
     return filteredResults;
 }
 
@@ -58,7 +66,12 @@ app.get('/api/animals', (req,res) => {
     res.json(results);
 });
 
-// Tell the server to listen for requests
-app.listen(3001, () => {
-    console.log(`API server now on port 3001!`);
+// Tell the server to listen for requests. Set up to work with Heroku.
+app.listen(PORT, () => {
+    console.log(`API server now on port ${PORT}!`);
 });
+
+// Original port (before using Heroku)
+// app.listen(3001, () => {
+//     console.log(`API server now on port 3001!`);
+// });
