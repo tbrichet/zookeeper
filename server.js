@@ -3,6 +3,7 @@ const { animals } = require('./:data/animals');
 
 // Use Express.js npm package
 const express = require('express');
+const e = require('express');
 
 // Tell app to use an environemnt variable (to work with Heroku)
 const PORT = process.env.PORT || 3001;
@@ -55,6 +56,12 @@ function filterByQuery(query, animalsArray) {
     return filteredResults;
 }
 
+// Function to take in the id and array of animals and return a single animal object
+function findById(id, animalsArray) {
+    const result = animalsArray.filter(animal => animal.id ===id)[0];
+    return result;
+}
+
 // Add the route that the front end can request data from
 app.get('/api/animals', (req,res) => {
     // Create new variable to create a "copy" of the animal data that can change based on our search
@@ -64,6 +71,19 @@ app.get('/api/animals', (req,res) => {
         results = filterByQuery(req.query, results);
     }
     res.json(results);
+});
+
+// Define specific search parameter when searching for one specific animal (instead of array of animals that all match a query)
+// Param routes MUST come after the other get route
+// Only returns one specific animal since searching by animal ID
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);
+    if (result) {
+        res.json(result)
+    } else {
+        // Client receives 404 error if no record exists for searched animal
+        res.send(404);
+    }
 });
 
 // Tell the server to listen for requests. Set up to work with Heroku.
