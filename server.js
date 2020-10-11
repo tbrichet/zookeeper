@@ -28,6 +28,9 @@ app.use(express.urlencoded({ extended: true }));
 // Both of these middleware functions need to be set up every time you create a server that's looking to accept POST data
 app.use(express.json());
 
+// Middleware that instructs the server to make files in public folder available
+app.use(express.static('public'));
+
 
 // Filter data by query. Function will need 2 things to run: query and an animals array
 function filterByQuery(query, animalsArray) {
@@ -146,7 +149,7 @@ app.post('/api/animals', (req, res) => {
     // if any data in the req.body is incorrect, send 400 error back
     if (!validateAnimal(req.body)) {
         req.status(400).send('The animal is not properly formatted');
-        
+
     } else {
 
     // Add animal to json file and animals array in this function
@@ -161,6 +164,22 @@ app.post('/api/animals', (req, res) => {
     res.json(animal);
     }
 });
+
+// Add route to get index.html to be served from our Express.js server
+// The '/' brings us to the root route of the server - used to create the homepage
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+// Add route to get animals.html page to be served from Express.js server
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+// Add route to get zookeepers.html page to be served from Express.js server
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+  });
 
 
 // Tell the server to listen for requests. Set up to work with Heroku.
