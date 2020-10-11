@@ -144,6 +144,15 @@
         "goofy"
       ],
       "id": "14"
+    },
+    {
+      "name": "Buddy",
+      "species": "Buffalo",
+      "diet": "herbivore",
+      "personalityTraits": [
+        "anxious"
+      ],
+      "id": "15"
     }
   ]
 }
